@@ -75,6 +75,7 @@ Learn about components of this kit is using:
 - [wagmi](https://wagmi.sh/) - React Hooks for Ethereum
 - [RainbowKit](https://rainbowkit.com/) - React library for wallet connections with dApp.
 - [Headless UI](https://headlessui.dev/) - Unstyled, fully accessible UI components
+- [R3vl SDK](https://docs.r3vl.xyz/reveel-protocol-v1.1-documentation/)
 
 ## License
 
