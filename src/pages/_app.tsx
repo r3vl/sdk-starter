@@ -23,6 +23,7 @@ import { createClient, configureChains, WagmiConfig } from 'wagmi'
 import { infuraProvider } from 'wagmi/providers/infura'
 import { publicProvider } from 'wagmi/providers/public'
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
+import { R3vlProvider, createClient as r3vlCreateClient } from '@r3vl/sdk'
 
 function App({ Component, pageProps }: AppProps) {
   const router = useRouter()
@@ -104,6 +105,7 @@ const connectors = connectorsForWallets([
   },
 ])
 
+const r3vlClient = r3vlCreateClient()
 const wagmiClient = createClient({ autoConnect: true, connectors, provider })
 
 // Web3Wrapper
@@ -115,19 +117,21 @@ export function Web3Wrapper({ children }) {
   if (!mounted) return null
 
   return (
-    <WagmiConfig client={wagmiClient}>
-      <RainbowKitProvider
-        appInfo={{
-          appName: app.name,
-          learnMoreUrl: app.url,
-        }}
-        chains={chains}
-        initialChain={1} // Optional, initialChain={1}, initialChain={chain.mainnet}, initialChain={gnosisChain}
-        showRecentTransactions={true}
-        theme={resolvedTheme === 'dark' ? darkTheme() : lightTheme()}
-      >
-        {children}
-      </RainbowKitProvider>
-    </WagmiConfig>
+    <R3vlProvider client={r3vlClient}>
+      <WagmiConfig client={wagmiClient}>
+        <RainbowKitProvider
+          appInfo={{
+            appName: app.name,
+            learnMoreUrl: app.url,
+          }}
+          chains={chains}
+          initialChain={1} // Optional, initialChain={1}, initialChain={chain.mainnet}, initialChain={gnosisChain}
+          showRecentTransactions={true}
+          theme={resolvedTheme === 'dark' ? darkTheme() : lightTheme()}
+        >
+          {children}
+        </RainbowKitProvider>
+      </WagmiConfig>
+    </R3vlProvider>
   )
 }

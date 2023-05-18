@@ -1,10 +1,8 @@
-# dApp Starter Boilerplate
+# r3vl dApp Starter Boilerplate
 
-A dApp starter kit template to quick start a dapp project with Next.js + Tailwind CSS + Ethers + wagmi + RainbowKit.
+A dApp starter kit template to quick start a dapp project with Next.js + Tailwind CSS + Ethers + wagmi + RainbowKit and r3vl SDK.
 
 Other tools/components included: Headless UI, Heroicons, Autoprefixer, Sass, PostCSS, ESLint, Prettier.
-
-Live preview for this repo: https://dapp-starter.aris.ac
 
 ## Getting Started
 
@@ -14,6 +12,10 @@ yarn
 
 # Run the development server
 yarn dev
+
+# Connect wallet here: http://localhost:3000
+# Visit http://localhost:3000/demo
+
 ```
 
 ### ENV
