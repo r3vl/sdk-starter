@@ -16,6 +16,7 @@
     "@heroicons/react": "^2.0.13",
     "@popperjs/core": "^2.11.6",
     "@r3vl/sdk": "^0.0.35",
+    "@r3vl/widget": "0.0.6",
     "@rainbow-me/rainbowkit": "^0.8.1",
     "@tailwindcss/typography": "^0.5.8",
     "autoprefixer": "^10.4.13",
