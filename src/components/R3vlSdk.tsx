@@ -3,33 +3,76 @@ import { useEffect, useState } from 'react'
 import { useNetwork, useProvider, useSigner } from 'wagmi'
 
 const Form = ({ onCreateRevPath }) => {
-  const [collab1, setCollab1] = useState(0)
-  const [collab2, setCollab2] = useState(0)
+  const [collabs, setCollabs] = useState({ wallets: ['0x538C138B73836b811c148B3E4c3683B7B923A0E7'], shares: [100] })
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    if (collab1 === undefined && collab2 === undefined) return
-
-    const totalShare = collab1 + collab2
+    const totalShare = collabs.shares.reduce((prev, share) => prev + share, 0)
 
     if (totalShare === 100) setError(null)
     else setError('Total share must sum 100%')
-  }, [collab1, collab2, error])
+  }, [collabs, error])
 
   return (
     <div>
-      <p>Collaborator 1 0x01</p>
-      {false && <input placeholder="Share in percentage" onChange={e => setCollab1(parseFloat(e.target.value))} />}
-      <p>Collaborator 2 0x02</p>
-      {false && <input placeholder="Share in percentage" onChange={e => setCollab2(parseFloat(e.target.value))} />}
+      <div>
+        <table>
+          <tr>
+            <th>Collaborator Wallet</th>
+            <th>Share %</th>
+          </tr>
+          {collabs.wallets.map((_, id) => {
+            const wallet = collabs.wallets[id]
+            const share = collabs.shares[id]
+
+            return (
+              <tr key={id}>
+                <td className="flex flex-col">
+                  <input
+                    defaultValue={wallet}
+                    className={`border-black-50 my-4 border ${!wallet && 'border-red-600'}`}
+                    placeholder="Wallet address"
+                    onChange={e => {
+                      const _c = { ...collabs }
+
+                      _c.wallets[id] = e.target.value
+
+                      setCollabs(_c)
+                    }}
+                  />
+                </td>
+                <td>
+                  <input
+                    defaultValue={share}
+                    className="border-black-50 my-4 border"
+                    placeholder="Share in percentage"
+                    onChange={e => {
+                      const _c = { ...collabs }
+
+                      _c.shares[id] = parseFloat(e.target.value)
+
+                      setCollabs(_c)
+                    }}
+                  />
+                </td>
+              </tr>
+            )
+          })}
+        </table>
+        <button
+          className="bg-gray-400 p-2"
+          onClick={() => setCollabs({ wallets: [...collabs.wallets, ''], shares: [...collabs.shares, 0] })}
+        >
+          Add Collaborator
+        </button>
+      </div>
       <p>
         <button
+          className="bg-gray-500 p-2"
           onClick={() =>
             onCreateRevPath({
-              walletList: [
-                ['0xcf581538f7e6251aa7ff52edbaac3f86a0de7ea0', '0x1b90cc907694e8dbb920a7e12231677afff786ed'],
-              ],
-              distribution: [[60, 40]],
+              walletList: [[...collabs.wallets]],
+              distribution: [[...collabs.shares]],
               name: 'rev path test',
               mutabilityDisabled: true,
             })
@@ -54,9 +97,7 @@ const Sdk = () => {
     signer,
   })
 
-  const { mutateAsync: createRevenuePath } = useCreateRevenuePath({
-    customGasLimit: 210000,
-  })
+  const { mutateAsync: createRevenuePath } = useCreateRevenuePath()
 
   const onCreateRevPath = async payload => {
     const receipt = await createRevenuePath(payload)
